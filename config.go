@@ -395,8 +395,8 @@ func Parse(file *os.File) (string, error) {
 	err := func (format string, a ... interface{}) (string, error) { return "", errors.New(fmt.Sprintf(format, a...)) }
 
 	scanner := bufio.NewScanner(file)
-    for scanner.Scan() {
-    	line := scanner.Text()    	
+	for scanner.Scan() {
+		line := scanner.Text()
 		charIdx = 0
 
 		for ; charIdx < len(line); charIdx++ {
@@ -422,41 +422,41 @@ func Parse(file *os.File) (string, error) {
 				push(S_TOK)
 				back()
 				continue
-    		}
+			}
 
-    		if state == S_SKIP2NL {
-    			pop()
-    			charIdx = len(line)
-    			continue
-    		}
+			if state == S_SKIP2NL {
+				pop()
+				charIdx = len(line)
+				continue
+			}
 
-    		if state == S_TOK {
-    			if iToken == 0 && !isAlphaEx(p) {
-    				return err("internal error (non-alpha in S_TOK pos 0)")
-    			}
+			if state == S_TOK {
+				if iToken == 0 && !isAlphaEx(p) {
+					return err("internal error (non-alpha in S_TOK pos 0)")
+				}
 
-    			if len(sToken) == maxTokenLength {
-    				return err("token too long")
-    			}
+				if len(sToken) == maxTokenLength {
+					return err("token too long")
+				}
 
-    			if !isAlphaEx(p) {
-    				pop()
-    				sToken = ""
-    				iToken = 0
-    				back()
-    				continue
-    			}
+				if !isAlphaEx(p) {
+					pop()
+					sToken = ""
+					iToken = 0
+					back()
+					continue
+				}
 
-    			if iToken == 0 {
-    				sToken = ""
-    			}
+				if iToken == 0 {
+					sToken = ""
+				}
 
-    			sToken += p
-    			iToken++
-    			continue
-    		}
+				sToken += p
+				iToken++
+				continue
+			}
 
-    		if state == S_TYPE {		
+			if state == S_TYPE {		
 				if unicode.IsSpace(p) {
 					continue
 				}
@@ -493,6 +493,6 @@ func Parse(file *os.File) (string, error) {
 				
 				return err("invalid section type '%s'", sToken)
 			}
-    	}
-    }
+		}
+	}
 }
